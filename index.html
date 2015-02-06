@@ -15,18 +15,17 @@
         </style>
     </head>
     <body>
-        <div id="wrapper"><div id="timer">0:00:00</div></div>
+        <div id="wrapper"><div id="timer"></div></div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
         <script>
             var timer = document.getElementById('timer'),
                 target = location.hash ? moment(location.hash.replace('#', '')) : moment().add(5, 'minutes'),
                 padTimePart = function(num) { return '00'.substring(0, 2-String(num).length) + num; },
                 format = function(duration) { return Math.floor(duration.asHours()) + ':' + padTimePart(duration.minutes()) + ':' + padTimePart(duration.seconds()); };
+                update = function() { var diff = target.diff(moment()); diff < 0 ? clearInterval(x) : timer.innerHTML = format(moment.duration(diff)); };
 
-            var x = setInterval(function() { 
-                var diff = target.diff(moment()); 
-                diff < 0 ? clearInterval(x) : timer.innerHTML = format(moment.duration(diff));
-            }, 1000);
+            var x = setInterval(update, 1000);
+            update();
         </script>
     </body>
 </html>
